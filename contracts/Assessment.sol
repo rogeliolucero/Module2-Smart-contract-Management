@@ -9,6 +9,8 @@ contract Assessment {
 
     event Deposit(uint256 amount);
     event Withdraw(uint256 amount);
+    event PinSet(string pin);
+    event NotificationSent(address indexed receiver, string message);
 
     constructor(uint initBalance) payable {
         owner = payable(msg.sender);
@@ -56,5 +58,18 @@ contract Assessment {
 
         // emit the event
         emit Withdraw(_withdrawAmount);
+    }
+
+    string private pin;
+
+    function setPin(string memory _pin) public {
+        require(msg.sender == owner, "You are not the owner of this account");
+        pin = _pin;
+        emit PinSet(_pin);
+    }
+
+    function notify(address _receiver, string memory _message) public {
+        require(msg.sender == owner, "You are not the owner of this account");
+        emit NotificationSent(_receiver, _message);
     }
 }
